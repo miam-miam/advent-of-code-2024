@@ -9,12 +9,11 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<usize> {
-    let (mut first, mut second): (Vec<u32>, Vec<u32>) = input.lines().map(|l| -> (u32, u32) { parse!(l, "{}   {}")}).collect();
-    let first_counts = first.into_iter().counts();
+    let (first, second): (Vec<u32>, Vec<u32>) = input.lines().map(|l| -> (u32, u32) { parse!(l, "{}   {}")}).collect();
     let second_counts = second.into_iter().counts();
-    Some(first_counts.into_iter().map(|(num, count)| {
+    Some(first.into_iter().map(|num| {
         let second_count = second_counts.get(&num).unwrap_or(&0);
-        num as usize * count * second_count
+        num as usize * second_count
     }).sum())
 }
 
