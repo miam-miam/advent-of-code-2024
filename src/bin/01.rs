@@ -1,22 +1,21 @@
+use itertools::Itertools;
+use prse::parse;
+
 pub fn part_one(input: &str) -> Option<u32> {
-    Some(input.lines().map(|l| {
-        let first = l.chars().find(char::is_ascii_digit).unwrap() as u32 - '0' as u32;
-        let last = l.chars().rfind(char::is_ascii_digit).unwrap() as u32 - '0' as u32;
-        first * 10 + last
-    }).sum())
+    let (mut first, mut second): (Vec<u32>, Vec<u32>) = input.lines().map(|l| -> (u32, u32) { parse!(l, "{}   {}")}).collect();
+    first.sort();
+    second.sort();
+    Some(first.into_iter().zip_eq(second).map(|(f, s)| f.abs_diff(s)).sum())
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
-    let mut input = input.replace("one", "o1e");
-    input = input.replace("two", "t2o");
-    input = input.replace("three", "t3e");
-    input = input.replace("four", "f4r");
-    input = input.replace("five", "f5e");
-    input= input.replace("six", "s6x");
-    input = input.replace("seven", "s7n");
-    input = input.replace("eight", "e8t");
-    input = input.replace("nine", "n9e");
-    part_one(&input)
+pub fn part_two(input: &str) -> Option<usize> {
+    let (mut first, mut second): (Vec<u32>, Vec<u32>) = input.lines().map(|l| -> (u32, u32) { parse!(l, "{}   {}")}).collect();
+    let first_counts = first.into_iter().counts();
+    let second_counts = second.into_iter().counts();
+    Some(first_counts.into_iter().map(|(num, count)| {
+        let second_count = second_counts.get(&num).unwrap_or(&0);
+        num as usize * count * second_count
+    }).sum())
 }
 
 fn main() {
@@ -31,12 +30,13 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        assert_eq!(part_one("1abc2\npqr3stu8vwx\na1b2c3d4e5f\ntreb7uchet"), Some(142));
+        let input = advent_of_code::read_file("examples", 1);
+        assert_eq!(part_one(&input), Some(11));
     }
 
     #[test]
     fn test_part_two() {
         let input = advent_of_code::read_file("examples", 1);
-        assert_eq!(part_two(&input), Some(281));
+        assert_eq!(part_two(&input), Some(31));
     }
 }
