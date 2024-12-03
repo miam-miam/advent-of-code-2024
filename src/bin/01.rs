@@ -2,19 +2,36 @@ use itertools::Itertools;
 use prse::parse;
 
 pub fn part_one(input: &str) -> Option<u32> {
-    let (mut first, mut second): (Vec<u32>, Vec<u32>) = input.lines().map(|l| -> (u32, u32) { parse!(l, "{}   {}")}).collect();
+    let (mut first, mut second): (Vec<u32>, Vec<u32>) = input
+        .lines()
+        .map(|l| -> (u32, u32) { parse!(l, "{}   {}") })
+        .collect();
     first.sort();
     second.sort();
-    Some(first.into_iter().zip_eq(second).map(|(f, s)| f.abs_diff(s)).sum())
+    Some(
+        first
+            .into_iter()
+            .zip_eq(second)
+            .map(|(f, s)| f.abs_diff(s))
+            .sum(),
+    )
 }
 
 pub fn part_two(input: &str) -> Option<usize> {
-    let (first, second): (Vec<u32>, Vec<u32>) = input.lines().map(|l| -> (u32, u32) { parse!(l, "{}   {}")}).collect();
+    let (first, second): (Vec<u32>, Vec<u32>) = input
+        .lines()
+        .map(|l| -> (u32, u32) { parse!(l, "{}   {}") })
+        .collect();
     let second_counts = second.into_iter().counts();
-    Some(first.into_iter().map(|num| {
-        let second_count = second_counts.get(&num).unwrap_or(&0);
-        num as usize * second_count
-    }).sum())
+    Some(
+        first
+            .into_iter()
+            .map(|num| {
+                let second_count = second_counts.get(&num).unwrap_or(&0);
+                num as usize * second_count
+            })
+            .sum(),
+    )
 }
 
 fn main() {
