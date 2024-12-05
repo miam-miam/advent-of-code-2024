@@ -8,6 +8,8 @@ on:
 jobs:
     update-readme:
         runs-on: ubuntu-latest
+        permissions:
+          contents: write
         steps:
             - uses: actions/checkout@v2
               if: ${{ env.AOC_ENABLED }}
@@ -22,7 +24,7 @@ jobs:
                   sessionCookie: ${{ secrets.AOC_SESSION }}
                   year: ${{ secrets.AOC_YEAR }}
                   solutionLocations: "src/bin/{}.rs"
-            - uses: stefanzweifel/git-auto-commit-action@v4
+            - uses: stefanzweifel/git-auto-commit-action@v5
               if: ${{ env.AOC_ENABLED }}
               env:
                   AOC_ENABLED: ${{ secrets.AOC_ENABLED }}
