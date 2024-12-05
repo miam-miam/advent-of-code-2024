@@ -1,8 +1,8 @@
 use prse::parse;
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 
-fn parse(input: &str) -> (Vec<Vec<u32>>, BTreeMap<u32, Vec<u32>>) {
-    let mut depends_on: BTreeMap<u32, Vec<u32>> = BTreeMap::new();
+fn parse(input: &str) -> (Vec<Vec<u32>>, HashMap<u32, Vec<u32>>) {
+    let mut depends_on: HashMap<u32, Vec<u32>> = HashMap::new();
     let mut pages = vec![];
     let mut first_stage = true;
 
@@ -22,7 +22,7 @@ fn parse(input: &str) -> (Vec<Vec<u32>>, BTreeMap<u32, Vec<u32>>) {
 
 pub fn part_one(input: &str) -> Option<u32> {
     let (pages, depends_on) = parse(input);
-    
+
     let mut sum = 0;
 
     for page in pages {
@@ -33,7 +33,7 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(sum)
 }
 
-fn check_page_valid(page: &[u32], depends_on: &BTreeMap<u32, Vec<u32>>) -> bool {
+fn check_page_valid(page: &[u32], depends_on: &HashMap<u32, Vec<u32>>) -> bool {
     for (i, elem) in page.iter().enumerate() {
         if let Some(dependencies) = depends_on.get(elem) {
             let currently_evaluated = &page[..i];
@@ -65,7 +65,7 @@ pub fn part_two(input: &str) -> Option<u32> {
     Some(sum)
 }
 
-fn fix_page(page: &mut Vec<u32>, depends_on: &BTreeMap<u32, Vec<u32>>) {
+fn fix_page(page: &mut Vec<u32>, depends_on: &HashMap<u32, Vec<u32>>) {
     for (i, elem) in page.iter().enumerate() {
         if let Some(dependencies) = depends_on.get(elem) {
             let currently_evaluated = &page[..i];
